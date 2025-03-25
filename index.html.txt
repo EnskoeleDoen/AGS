@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>API Waarde Weergeven</title>
+</head>
+<body>
+  <h1>Waarde van API: <span id="api-value">Laden...</span></h1>
+  
+  <script>
+    // Maak een fetch request naar het API endpoint
+    fetch('https://ags.peetermans.dev/api/devices/1/zone1')
+      .then(response => response.text())  // Verwacht een tekstuele respons
+      .then(data => {
+        // Toon de opgehaalde data in het element met id "api-value"
+        document.getElementById('api-value').innerText = data;
+      })
+      .catch(error => {
+        console.error('Fout bij ophalen van de API:', error);
+        document.getElementById('api-value').innerText = "Er is een fout opgetreden";
+      });
+  </script>
+</body>
+</html>
