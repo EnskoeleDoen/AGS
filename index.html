@@ -2,18 +2,28 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>API Waarde Weergeven</title>
+  <title>API Dashboard Test</title>
 </head>
 <body>
-  <h1>Waarde van API: <span id="api-value">Laden...</span></h1>
-  
+  <h1>Waarde van API (via proxy): <span id="api-value">Laden...</span></h1>
+
   <script>
-    // Maak een fetch request naar het API endpoint
-    fetch('https://ags.peetermans.dev/api/devices/1/zone1')
-      .then(response => response.text())  // Verwacht een tekstuele respons
+    // Definieer de originele API-URL
+    const originalUrl = 'https://ags.peetermans.dev/api/devices/1/zone1';
+    // Gebruik de gratis AllOrigins proxy om CORS-restricties te omzeilen
+    const proxyUrl = 'https://api.allorigins.hexocode.repl.co/get?disableCache=true&url=' + encodeURIComponent(originalUrl);
+
+    // Voer een fetch-request uit naar de proxy
+    fetch(proxyUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Netwerkrespons was niet ok");
+        }
+        return response.json();
+      })
       .then(data => {
-        // Toon de opgehaalde data in het element met id "api-value"
-        document.getElementById('api-value').innerText = data;
+        // AllOrigins geeft de originele respons terug in de property "contents"
+        document.getElementById('api-value').innerText = data.contents;
       })
       .catch(error => {
         console.error('Fout bij ophalen van de API:', error);
